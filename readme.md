@@ -13,7 +13,7 @@ in composer.json, add code
 ```
 
 after exec in bash
- ```bash
+```
 composer require int/lumen-base
 ```
 
@@ -23,11 +23,11 @@ composer require int/lumen-base
 #####Enable Facades
 
 of
-```php
+```
 // $app->withFacades();
 ```
 to 
-```php
+```
 $app->withFacades();
 ```
 
@@ -36,14 +36,14 @@ $app->withFacades();
 #####Alter Exception Handler.
 
 of
-```php
+```
 $app->sngleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::clas
 );
 ```
 to
-```php
+```
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     \Int\Lumen\Core\Exceptions\Handler::class
@@ -51,7 +51,7 @@ $app->singleton(
 ```
 
 #####Add Middleware Accepts Json
-```php
+```
 $app->middleware([
     \Int\Lumen\Core\Http\Middleware\AcceptsJsonMiddleware::class
 ]);
@@ -59,12 +59,12 @@ $app->middleware([
 
 
 #####Add Transformer Service Provider
-```php
+```
 $app->register(\Int\Lumen\Core\Providers\TransformerServiceProvider::class);
 ```
 
 #####Add Config to Monolog
-```php
+```
 $app->configureMonologUsing(function ($monolog) {
 
     $monolog->pushHandler(new \Monolog\Handler\StreamHandler(storage_path() . '/logs/api.log'));
