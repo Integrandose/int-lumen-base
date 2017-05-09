@@ -4,6 +4,7 @@ namespace Int\Lumen\Core\Exceptions;
 
 use Exception;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -46,8 +47,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-
-
         if ($e instanceof ClientException) {
 
             return response()->json([
