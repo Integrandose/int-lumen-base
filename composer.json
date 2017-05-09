@@ -1,0 +1,14 @@
+{
+  "name": "int/lumen-base",
+  "description": "Base for microservices Integrando.se",
+  "type": "library",
+  "license": "proprietary",
+  "require": {
+    "league/fractal": "^0.16.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Int\\Lumen\\Core\\": "./"
+    }
+  }
+}
