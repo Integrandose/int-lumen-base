@@ -24,7 +24,7 @@ class ApiController extends BaseController
 
     protected $transformer;
 
-    public function __construct( Manager $manager)
+    public function __construct(Manager $manager)
     {
         $this->transformer = $manager;
     }
@@ -36,7 +36,7 @@ class ApiController extends BaseController
      */
     public function transformData($data, TransformerAbstract $transform)
     {
-        if ($data instanceof LengthAwarePaginator) return $this->transformCollection($data, $transform);
+        if ($data instanceof LengthAwarePaginator || $data instanceof Collection) return $this->transformCollection($data, $transform);
         return $this->transformItem($data, $transform);
     }
 
@@ -59,9 +59,17 @@ class ApiController extends BaseController
     private function transformCollection($data, TransformerAbstract $transform)
     {
 
-        $resource = new CollectionFractal($data->getCollection(), $transform);
-        $resource->setPaginator(new IlluminatePaginatorAdapter($data));
+        if ($data instanceof Collection) {
+            $resource = new CollectionFractal($data, $transform);
+        }
+
+        if ($data instanceof LengthAwarePaginator) {
+            $resource = new CollectionFractal($data->getCollection(), $transform);
+            $resource->setPaginator(new IlluminatePaginatorAdapter($data));
+        }
+
         return $this->transformer->createData($resource)->toArray();
+
     }
 
     /**
@@ -130,7 +138,7 @@ class ApiController extends BaseController
         ];
 
 
-        Log::error($message,$data);
+        Log::error($message, $data);
 
         return $this->respond($data, $headers);
     }
