@@ -42,9 +42,6 @@ class ApiController extends BaseController
     public function transformData($data, TransformerAbstract $transform)
     {
 
-        if()
-
-
         if ($data instanceof LengthAwarePaginator || $data instanceof Collection) return $this->transformCollection($data, $transform);
         return $this->transformItem($data, $transform);
     }
