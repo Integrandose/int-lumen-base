@@ -24,9 +24,14 @@ class ApiController extends BaseController
 
     protected $transformer;
 
-    public function __construct(Manager $manager)
+    public function __construct(Manager $manager, Request $request)
     {
+
+        if($request->has('include')){
+            $manager->parseIncludes($request->has('include'));
+        }
         $this->transformer = $manager;
+
     }
 
     /**
@@ -36,6 +41,10 @@ class ApiController extends BaseController
      */
     public function transformData($data, TransformerAbstract $transform)
     {
+
+        if()
+
+
         if ($data instanceof LengthAwarePaginator || $data instanceof Collection) return $this->transformCollection($data, $transform);
         return $this->transformItem($data, $transform);
     }
