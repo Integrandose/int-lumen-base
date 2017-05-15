@@ -28,7 +28,7 @@ class ApiController extends BaseController
     {
 
         if($request->has('include')){
-            $manager->parseIncludes($request->has('include'));
+            $manager->parseIncludes($request->get('include'));
         }
         $this->transformer = $manager;
 
