@@ -50,8 +50,5 @@ trait Sort
 
             return $sort;
         }, $fields);
-
     }
-
-
 }

@@ -20,9 +20,17 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 class ApiController extends BaseController
 {
 
+
     protected $status = Response::HTTP_OK;
 
     protected $transformer;
+
+    protected $maxLimit = 100;
+
+    protected $defaultLimit = 20;
+
+
+
 
     public function __construct(Manager $manager, Request $request)
     {
@@ -32,6 +40,14 @@ class ApiController extends BaseController
         }
         $this->transformer = $manager;
 
+    }
+
+    protected function getLimit() :int {
+
+        $request = app('request');
+
+        $limit = $request->get('limit') ?? $this->defaultLimit;
+        return (int) $limit > $this->maxLimit ? $this->maxLimit : $limit;
     }
 
     /**
