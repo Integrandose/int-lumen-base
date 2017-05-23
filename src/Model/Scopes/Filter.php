@@ -2,6 +2,7 @@
 
 
 namespace Int\Lumen\Core\Model\Scopes;
+
 use DB;
 
 /**
@@ -25,7 +26,7 @@ trait Filter
         }
 
         foreach ($this->getListFilters($attributes) as $filter) {
-            $query->where($filter['attribute'], $filter['operator'], $filter['value']);
+            $query = $this->applyQueryFilter($filter, $query);
         }
 
         return $query;
@@ -53,7 +54,7 @@ trait Filter
         $key = explode('@', $key);
         $operator = $key[1] ?? null;
 
-        return ['attribute' => $key[0], 'operator' => $this->parserOperator($operator), 'value' => $value];
+        return ['attribute' => $key[0], 'operator' => $operator, 'value' => $value];
     }
 
 
@@ -77,38 +78,60 @@ trait Filter
         return in_array($key[0], $this->filterAttributes);
     }
 
-    /**
-     * Parser Operator
-     * @param $key
-     * @return string
-     */
-    private function parserOperator($key)
-    {
 
-        switch (strtolower($key)) {
+    /**
+     * @todo REFATORAR SWITCH
+     * @param $filter
+     * @param $query
+     * @return mixed
+     */
+    private function applyQueryFilter($filter, $query)
+    {
+        switch (strtolower($filter['operator'])) {
+
+            case 'between':
+                return  $query->whereBetween($filter['attribute'], $this->filterValueToArray($filter['value']));
+
+            case 'notbetween':
+                return $query->whereNotBetween($filter['attribute'], $this->filterValueToArray($filter['value']));
 
             case 'gte':
-                return '>=';
+                return  $query->where($filter['attribute'],'>=', $filter['value']);
 
             case 'gt':
-                return '>';
+                return  $query->where($filter['attribute'],'>', $filter['value']);
 
             case 'lt':
-                return '<';
+                return  $query->where($filter['attribute'],'<', $filter['value']);
 
             case 'lte':
-                return '<=';
+                return  $query->where($filter['attribute'],'<=', $filter['value']);
 
             case 'like':
-                return 'LIKE';
+                return  $query->where($filter['attribute'],'like', $filter['value']);
 
             case 'in':
-                return 'IN';
+                return $query->whereIn($filter['attribute'], array_filter(explode(',', $filter['value'])));
+
+            case 'notin':
+                return $query->whereNotIn($filter['attribute'], array_filter(explode(',', $filter['value'])));
+
+            case 'null':
+                return $query->whereNull($filter['attribute']);
+
+            case 'notnull':
+                return $query->whereNotNull($filter['attribute']);
 
             case 'eq':
             default:
-                return '=';
+                return $query->where($filter['attribute'], $filter['value']);
         }
+
+
+    }
+
+    private function filterValueToArray($value) {
+        return array_filter(explode(',', $value));
     }
 
 }
