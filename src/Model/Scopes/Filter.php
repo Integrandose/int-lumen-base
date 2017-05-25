@@ -4,6 +4,7 @@
 namespace Int\Lumen\Core\Model\Scopes;
 
 use DB;
+use function GuzzleHttp\Psr7\str;
 
 /**
  * Trait Filter
@@ -79,6 +80,20 @@ trait Filter
     }
 
 
+    private function getFilterMethod($filter)
+    {
+        $filterNamePaths = explode('_', $filter);
+        $nameMethod = 'filter' . ucwords(implode('', $filterNamePaths));
+
+        return $nameMethod;
+    }
+
+    private function isFilterMethod($method)
+    {
+        return method_exists($this, $method);
+    }
+
+
     /**
      * @todo REFATORAR SWITCH
      * @param $filter
@@ -87,28 +102,33 @@ trait Filter
      */
     private function applyQueryFilter($filter, $query)
     {
+
+        if ($this->isFilterMethod($this->getFilterMethod($filter['attribute']))) {
+            return $this->callMethodFilter($filter, $query);
+        }
+
         switch (strtolower($filter['operator'])) {
 
             case 'between':
-                return  $query->whereBetween($filter['attribute'], $this->filterValueToArray($filter['value']));
+                return $query->whereBetween($filter['attribute'], $this->filterValueToArray($filter['value']));
 
             case 'notbetween':
                 return $query->whereNotBetween($filter['attribute'], $this->filterValueToArray($filter['value']));
 
             case 'gte':
-                return  $query->where($filter['attribute'],'>=', $filter['value']);
+                return $query->where($filter['attribute'], '>=', $filter['value']);
 
             case 'gt':
-                return  $query->where($filter['attribute'],'>', $filter['value']);
+                return $query->where($filter['attribute'], '>', $filter['value']);
 
             case 'lt':
-                return  $query->where($filter['attribute'],'<', $filter['value']);
+                return $query->where($filter['attribute'], '<', $filter['value']);
 
             case 'lte':
-                return  $query->where($filter['attribute'],'<=', $filter['value']);
+                return $query->where($filter['attribute'], '<=', $filter['value']);
 
             case 'like':
-                return  $query->where($filter['attribute'],'like', $filter['value']);
+                return $query->where($filter['attribute'], 'like', $filter['value']);
 
             case 'in':
                 return $query->whereIn($filter['attribute'], array_filter(explode(',', $filter['value'])));
@@ -126,12 +146,27 @@ trait Filter
             default:
                 return $query->where($filter['attribute'], $filter['value']);
         }
-
-
     }
 
-    private function filterValueToArray($value) {
-        return array_filter(explode(',', $value));
+    private function filterValueCast($value) {
+        return is_numeric($value) ? (float) $value: (string) $value;
+    }
+
+    private function filterValueToArray($value)
+    {
+        $values = array_filter(explode(',', $value));
+
+        return array_map([$this, 'filterValueCast' ], $values);
+    }
+
+    /**
+     * @param $filter
+     * @param $query
+     * @return mixed
+     */
+    private function callMethodFilter($filter, $query)
+    {
+        return $this->{$this->getFilterMethod($filter['attribute'])}($filter, $query);
     }
 
 }
