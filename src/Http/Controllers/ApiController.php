@@ -29,7 +29,7 @@ class ApiController extends BaseController
 
     protected $defaultLimit = 20;
 
-    
+
 
     public function __construct(Manager $manager, Request $request)
     {
