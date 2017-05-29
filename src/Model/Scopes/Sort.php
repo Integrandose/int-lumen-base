@@ -2,6 +2,7 @@
 
 
 namespace Int\Lumen\Core\Model\Scopes;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
 /**
@@ -19,7 +20,6 @@ trait Sort
         }
 
         foreach ($this->getListSorts($attributes) as $sort) {
-
             $query = $this->applyQuerySort($sort, $query);
         }
 
@@ -45,7 +45,14 @@ trait Sort
      */
     private function isSortable($value)
     {
-        return in_array(str_replace('-', '', $value), $this->sortAttributes);
+        $attribute = str_replace('-', '', $value);
+
+        if (in_array($attribute, $this->sortAttributes)) {
+            return true;
+        }
+
+        throw new BadRequestHttpException('invalid attribute for sort: ' . $attribute);
+
     }
 
 
