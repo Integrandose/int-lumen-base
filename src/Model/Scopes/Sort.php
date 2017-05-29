@@ -20,7 +20,6 @@ trait Sort
 
         foreach ($this->getListSorts($attributes) as $sort) {
 
-
             $query = $this->applyQuerySort($sort, $query);
         }
 

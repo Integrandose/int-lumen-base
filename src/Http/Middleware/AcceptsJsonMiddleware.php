@@ -21,10 +21,9 @@ class AcceptsJsonMiddleware
 
         if (!$request->acceptsJson()) {
 
-            $data = ['error' => [
+            $data = [
                 'message' => 'Header Accept: application/json is necessary',
-                'status_code' => Response::HTTP_BAD_REQUEST
-            ]];
+            ];
 
             Log::warning($data['error']['message']);
 
