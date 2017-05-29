@@ -29,8 +29,7 @@ class ApiController extends BaseController
 
     protected $defaultLimit = 20;
 
-
-
+    
 
     public function __construct(Manager $manager, Request $request)
     {
@@ -40,6 +39,11 @@ class ApiController extends BaseController
         }
         $this->transformer = $manager;
 
+    }
+
+    protected function getSort() {
+        $request = app('request');
+        return $request->get('sort') ?? null;
     }
 
     protected function getLimit() :int {
