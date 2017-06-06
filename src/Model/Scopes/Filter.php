@@ -5,6 +5,7 @@ namespace Int\Lumen\Core\Model\Scopes;
 
 use DB;
 use function GuzzleHttp\Psr7\str;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Trait Filter
@@ -27,6 +28,7 @@ trait Filter
         }
 
         foreach ($this->getListFilters($attributes) as $filter) {
+
             $query = $this->applyQueryFilter($filter, $query);
         }
 
@@ -40,8 +42,8 @@ trait Filter
      */
     private function getListFilters($attributes)
     {
-        $attributes = $this->getAvaliableFilters($attributes);
-        return array_map(array($this, 'parserFilter'), $attributes, array_keys($attributes));
+        $attributesAvaliable = $this->getAvaliableFilters($attributes);
+        return array_map(array($this, 'parserFilter'), $attributesAvaliable, array_keys($attributesAvaliable));
     }
 
     /**
@@ -76,7 +78,12 @@ trait Filter
     private function isFilterable($key)
     {
         $key = explode('@', $key);
-        return in_array($key[0], $this->filterAttributes);
+        if (in_array($key[0], $this->filterAttributes)) {
+            return true;
+        }
+
+        throw new BadRequestHttpException('invalid attribute for filter: ' . $key[0]);
+
     }
 
 
@@ -148,15 +155,16 @@ trait Filter
         }
     }
 
-    private function filterValueCast($value) {
-        return is_numeric($value) ? (float) $value: (string) $value;
+    private function filterValueCast($value)
+    {
+        return is_numeric($value) ? (float)$value : (string)$value;
     }
 
     private function filterValueToArray($value)
     {
         $values = array_filter(explode(',', $value));
 
-        return array_map([$this, 'filterValueCast' ], $values);
+        return array_map([$this, 'filterValueCast'], $values);
     }
 
     /**

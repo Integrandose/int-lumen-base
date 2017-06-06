@@ -53,15 +53,20 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
         if ($e instanceof ClientException) {
-
             return response()->json([
-                "error" => [
                     "message" => $e->getMessage(),
-                    "status_code" => Response::HTTP_UNPROCESSABLE_ENTITY,
                     "erros" => $e->getErros()
-                ]
+
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-        return parent::render($request, $e);
+
+
+        if ($e instanceof ValidationException && $e->getResponse()) {
+            return $e->getResponse();
+        }
+
+        $response = parent::render($request, $e);
+
+        return response()->json(["message" => $e->getMessage()], $response->getStatusCode());
     }
 }

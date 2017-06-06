@@ -23,7 +23,6 @@ class ApiValidationException extends ValidationException
         $data = [
             "error" => [
                 "message" => $this->getMessage(),
-                "status_code" => Response::HTTP_UNPROCESSABLE_ENTITY,
                 "erros" => $validator->getMessageBag()->toArray()
             ]
         ];

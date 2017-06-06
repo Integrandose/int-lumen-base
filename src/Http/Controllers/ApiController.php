@@ -16,6 +16,7 @@ use League\Fractal\Resource\Collection as CollectionFractal;
 use League\Fractal\Resource\Item as ItemFractal;
 use League\Fractal\TransformerAbstract;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use League\JsonGuard\Validator;
 
 class ApiController extends BaseController
 {
@@ -28,7 +29,6 @@ class ApiController extends BaseController
     protected $maxLimit = 100;
 
     protected $defaultLimit = 20;
-
 
 
     public function __construct(Manager $manager, Request $request)
@@ -44,6 +44,11 @@ class ApiController extends BaseController
     protected function getSort() {
         $request = app('request');
         return $request->get('sort') ?? null;
+    }
+
+    protected function getFilter() {
+        $request = app('request');
+        return $request->get('filter');
     }
 
     protected function getLimit() :int {
@@ -157,10 +162,10 @@ class ApiController extends BaseController
         $message = $message ?? Response::$statusTexts[$this->getStatus()];
 
         $data = [
-            "error" => [
+
                 "message" => $message,
-                "status_code" => $this->getStatus()
-            ]
+
+
         ];
 
 
@@ -192,4 +197,6 @@ class ApiController extends BaseController
             $request, $this->formatValidationErrors($validator)
         ));
     }
-}
+
+
+  }
