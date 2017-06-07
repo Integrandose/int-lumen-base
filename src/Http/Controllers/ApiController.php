@@ -34,29 +34,32 @@ class ApiController extends BaseController
     public function __construct(Manager $manager, Request $request)
     {
 
-        if($request->has('include')){
+        if ($request->has('include')) {
             $manager->parseIncludes($request->get('include'));
         }
         $this->transformer = $manager;
 
     }
 
-    protected function getSort() {
+    protected function getSort()
+    {
         $request = app('request');
         return $request->get('sort') ?? null;
     }
 
-    protected function getFilter() {
+    protected function getFilter()
+    {
         $request = app('request');
         return $request->get('filter');
     }
 
-    protected function getLimit() :int {
+    protected function getLimit(): int
+    {
 
         $request = app('request');
 
         $limit = $request->get('limit') ?? $this->defaultLimit;
-        return (int) $limit > $this->maxLimit ? $this->maxLimit : $limit;
+        return (int)$limit > $this->maxLimit ? $this->maxLimit : $limit;
     }
 
     /**
@@ -162,10 +165,7 @@ class ApiController extends BaseController
         $message = $message ?? Response::$statusTexts[$this->getStatus()];
 
         $data = [
-
-                "message" => $message,
-
-
+            "message" => $message,
         ];
 
 
@@ -199,4 +199,4 @@ class ApiController extends BaseController
     }
 
 
-  }
+}

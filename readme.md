@@ -1,18 +1,8 @@
 
 
-##Install
+## Install
 
-in composer.json, add code
-```json
-"repositories": [
-    {
-      "type": "vcs",
-      "url": "git@bitbucket.org:devsintegrandose/int-lumen-base.git"
-    }
-  ]
-```
 
-after exec in bash
 ```
 composer require int/lumen-base
 ```
@@ -20,9 +10,9 @@ composer require int/lumen-base
 
 ### Alter ./bootstrap/app.php
 
-#####Enable Facades
+##### Enable Facades
 
-of
+from
 ```
 // $app->withFacades();
 ```
@@ -33,11 +23,11 @@ $app->withFacades();
 
 
 
-#####Alter Exception Handler.
+##### Alter Exception Handler.
 
 of
 ```
-$app->sngleton(
+$app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::clas
 );
@@ -50,7 +40,7 @@ $app->singleton(
 );
 ```
 
-#####Add Middleware Accepts Json
+##### Add Middleware Accepts Json
 ```
 $app->middleware([
     \Int\Lumen\Core\Http\Middleware\AcceptsJsonMiddleware::class
@@ -58,12 +48,12 @@ $app->middleware([
 ```
 
 
-#####Add Transformer Service Provider
+##### Add Transformer Service Provider
 ```
 $app->register(\Int\Lumen\Core\Providers\TransformerServiceProvider::class);
 ```
 
-#####Add Config to Monolog
+##### Add Config to Monolog
 ```
 $app->configureMonologUsing(function ($monolog) {
 

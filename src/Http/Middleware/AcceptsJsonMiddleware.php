@@ -27,7 +27,7 @@ class AcceptsJsonMiddleware
 
             Log::warning($data['error']['message']);
 
-            return response()->json($data,Response::HTTP_BAD_REQUEST);
+            return response()->json($data, Response::HTTP_BAD_REQUEST);
 
         }
         return $next($request);
