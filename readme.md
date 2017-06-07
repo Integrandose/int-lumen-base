@@ -25,7 +25,7 @@ $app->withFacades();
 
 ##### Alter Exception Handler.
 
-of
+from
 ```
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
