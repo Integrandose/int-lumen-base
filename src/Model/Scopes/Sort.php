@@ -15,6 +15,7 @@ trait Sort
     public function scopeSort($query, $attributes)
     {
 
+
         if (!$attributes || $this->sortAttributes == null) {
             return $query;
         }
