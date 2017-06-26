@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 /**
  * Class CorsMiddleware
  * @package Int\Lumen\Core\Http\Middleware
+ * @todo implementar Cors em todos os Services
  */
 class CorsMiddleware
 {
