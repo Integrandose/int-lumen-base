@@ -12,9 +12,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 trait Sort
 {
 
-    public function scopeSort($query, $attributes)
+    public function scopeSort($query, $attributes, $language = null)
     {
-
+        $this->language = $language;
 
         if (!$attributes || $this->sortAttributes == null) {
             return $query;
@@ -56,7 +56,12 @@ trait Sort
 
     }
 
-
+    /**
+     * @param $sort
+     * @param $query
+     * @return mixed
+     * * @todo implementar sort com language=all
+     */
     private function applyQuerySort($sort, $query)
     {
 
@@ -64,9 +69,14 @@ trait Sort
             return $this->callSortMethod($sort, $query);
         }
 
+        if( !is_null($this->language) && $this->language!= 'all') {
+            $query->orderBy($sort['attribute'] .'.' . $this->language, $sort['direction']);
+
+            return $query;
+        }
+
+
         $query->orderBy($sort['attribute'], $sort['direction']);
-
-
         return $query;
     }
 

@@ -20,8 +20,9 @@ trait Filter
      * @param $attributes
      * @return mixed
      */
-    public function scopeFilter($query, $attributes)
+    public function scopeFilter($query, $attributes, $language = null)
     {
+        $this->language = $language;
 
         if (!$attributes || $this->filterAttributes == null) {
             return $query;
@@ -103,6 +104,7 @@ trait Filter
 
     /**
      * @todo REFATORAR SWITCH
+     * @todo implementar filtro com language=all
      * @param $filter
      * @param $query
      * @return mixed
@@ -113,6 +115,12 @@ trait Filter
         if ($this->isFilterMethod($this->getFilterMethod($filter['attribute']))) {
             return $this->callMethodFilter($filter, $query);
         }
+
+
+        if( !is_null($this->language) && $this->language!= 'all') {
+            $filter['attribute'] .= '.'.$this->language;
+        }
+
 
         switch (strtolower($filter['operator'])) {
 
