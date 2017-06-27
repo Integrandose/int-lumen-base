@@ -29,7 +29,6 @@ trait Filter
         }
 
         foreach ($this->getListFilters($attributes) as $filter) {
-
             $query = $this->applyQueryFilter($filter, $query);
         }
 
@@ -117,7 +116,7 @@ trait Filter
         }
 
 
-        if( !is_null($this->language) && $this->language!= 'all') {
+        if( !is_null($this->language) && $this->language!= 'all' && in_array($filter['attribute'], $this->translationAttributes)) {
             $filter['attribute'] .= '.'.$this->language;
         }
 

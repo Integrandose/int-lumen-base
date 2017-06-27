@@ -2,6 +2,7 @@
 
 
 namespace Int\Lumen\Core\Model\Scopes;
+
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
@@ -69,11 +70,11 @@ trait Sort
             return $this->callSortMethod($sort, $query);
         }
 
-        if( !is_null($this->language) && $this->language!= 'all') {
-            $query->orderBy($sort['attribute'] .'.' . $this->language, $sort['direction']);
+        if (!is_null($this->language) && $this->language != 'all' && in_array($sort['attribute'], $this->translationAttributes)) {
+        $query->orderBy($sort['attribute'] . '.' . $this->language, $sort['direction']);
 
-            return $query;
-        }
+        return $query;
+    }
 
 
         $query->orderBy($sort['attribute'], $sort['direction']);
