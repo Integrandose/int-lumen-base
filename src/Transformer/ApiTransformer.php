@@ -22,4 +22,8 @@ class ApiTransformer extends TransformerAbstract
         return collect($fields)->only($listFields)->toArray();
     }
 
+    protected function getLanguage() {
+        return  app('request')->get('language');
+    }
+
 }
