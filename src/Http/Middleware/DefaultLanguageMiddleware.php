@@ -17,9 +17,8 @@ class DefaultLanguageMiddleware
      */
     public function handle($request, \Closure $next)
     {
-
         if (!$request->has('language')) {
-            $request['language'] = 'pt_BR';
+            $request['language'] = 'pt';
         }
 
         return $next($request);

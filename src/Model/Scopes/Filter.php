@@ -8,7 +8,7 @@ use function GuzzleHttp\Psr7\str;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Trait Filter
+ * Traits Filter
  * @package Int\Lumen\Core\Model\Scopes
  */
 trait Filter

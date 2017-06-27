@@ -6,7 +6,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
 /**
- * Trait Sort
+ * Traits Sort
  * @package Int\Lumen\Core\Model\Scopes
  */
 trait Sort
