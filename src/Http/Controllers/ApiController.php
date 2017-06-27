@@ -38,7 +38,10 @@ class ApiController extends BaseController
             $manager->parseIncludes($request->get('include'));
         }
         $this->transformer = $manager;
+    }
 
+    protected function getLanguage() {
+        return  app('request')->get('language');
     }
 
     protected function getSort()
