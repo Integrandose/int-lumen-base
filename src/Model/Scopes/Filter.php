@@ -111,6 +111,10 @@ trait Filter
     private function applyQueryFilter($filter, $query)
     {
 
+        if (empty($filter['value'])) {
+            return $query;
+        }
+
         if ($this->isFilterMethod($this->getFilterMethod($filter['attribute']))) {
             return $this->callMethodFilter($filter, $query);
         }
