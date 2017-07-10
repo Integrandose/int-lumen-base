@@ -22,7 +22,6 @@ class ApiValidationException extends ValidationException
 
         $data = [
             "error" => [
-                "message" => $this->getMessage(),
                 "erros" => $validator->getMessageBag()->toArray()
             ]
         ];
