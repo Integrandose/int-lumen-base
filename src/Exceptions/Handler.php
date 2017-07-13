@@ -52,21 +52,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof ClientException) {
-
-
-            if (isset($this->hasErrors) && $this->hasErrors) {
-                return response()->json([
-                    "message" => $e->getMessage(),
-                    "erros" => $e->getErros()
-
-                ], Response::HTTP_UNPROCESSABLE_ENTITY);
-
-            }
+        if ($e instanceof ServiceClientException) {
 
             return response()->json([
-                "message" => $e->getMessage()
+                $e->getErros()
             ], $e->getResponse()->getStatusCode());
+
         }
 
 
