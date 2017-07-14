@@ -3,13 +3,12 @@
 namespace Int\Lumen\Core\Exceptions;
 
 use Exception;
-use GuzzleHttp\Exception\ClientException;
-use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Int\Services\Client\Exception\ServiceClientException;
 
 class Handler extends ExceptionHandler
 {
@@ -52,8 +51,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof ServiceClientException) {
 
+
+        if ($e instanceof ServiceClientException) {
             return response()->json([
                 $e->getErros()
             ], $e->getResponse()->getStatusCode());
