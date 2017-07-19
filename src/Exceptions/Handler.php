@@ -52,7 +52,6 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
 
-
         if ($e instanceof ServiceClientException) {
             return response()->json([
                 $e->getErros()

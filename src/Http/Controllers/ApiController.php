@@ -26,7 +26,7 @@ class ApiController extends BaseController
 
     protected $transformer;
 
-    protected $maxLimit = 100;
+    protected $maxLimit = 250;
 
     protected $defaultLimit = 20;
 
