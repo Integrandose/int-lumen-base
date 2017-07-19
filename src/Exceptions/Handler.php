@@ -57,9 +57,7 @@ class Handler extends ExceptionHandler
             return response()->json([
                 $e->getErros()
             ], $e->getResponse()->getStatusCode());
-
         }
-
 
         if ($e instanceof ValidationException && $e->getResponse()) {
             return $e->getResponse();
