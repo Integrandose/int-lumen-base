@@ -54,6 +54,10 @@ trait Translate
         }
 
         foreach ($this->translationAttributes as $attribute) {
+            if(!isset($this->attributes[$attribute])) {
+                continue;
+            }
+
             if ($this->getLanguage() == 'all') {
                 $this->attributes[$attribute] = $this->translations[$attribute];
                 continue;
@@ -70,9 +74,12 @@ trait Translate
     private function fillTranslations()
     {
         foreach ($this->translationAttributes as $attribute) {
+            if(!isset($this->attributes[$attribute])) {
+                continue;
+            }
+
+
             $this->translations[$attribute] = $this->attributes[$attribute];
         }
     }
-
-
 }
