@@ -58,12 +58,16 @@ trait Translate
                 continue;
             }
 
+            if(!isset($this->attributes[$attribute])) {
+                continue;
+            }
+
             if ($this->getLanguage() == 'all') {
                 $this->attributes[$attribute] = $this->translations[$attribute];
                 continue;
             }
 
-            $this->attributes[$attribute] = $this->translations[$attribute][$this->getLanguage()] ?? current($this->translations[$attribute]);
+            $this->attributes[$attribute] = ($this->translations[$attribute][$this->getLanguage()] && $this->translations[$attribute][$this->getLanguage()] != '') ?$this->translations[$attribute][$this->getLanguage()] : current($this->translations[$attribute]);
         }
     }
 
