@@ -67,7 +67,12 @@ trait Translate
                 continue;
             }
 
-            $this->attributes[$attribute] = ($this->translations[$attribute][$this->getLanguage()] && $this->translations[$attribute][$this->getLanguage()] != '') ?$this->translations[$attribute][$this->getLanguage()] : current($this->translations[$attribute]);
+            $this->attributes[$attribute] =
+                isset($this->translations[$attribute][$this->getLanguage()])
+                && $this->translations[$attribute][$this->getLanguage()] != ''
+                    ? $this->translations[$attribute][$this->getLanguage()]
+                    : current($this->translations[$attribute]);
+
         }
     }
 
