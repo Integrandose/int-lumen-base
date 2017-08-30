@@ -3,6 +3,7 @@
 namespace Int\Lumen\Core\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Int\Lumen\Core\Transformer\DataArraySerializer;
 use League\Fractal\Manager;
 
 class TransformerServiceProvider extends ServiceProvider
@@ -16,6 +17,7 @@ class TransformerServiceProvider extends ServiceProvider
     {
         $this->app->bind(Manager::class, function ($app) {
             $manager = new Manager();
+            $manager->setSerializer(new DataArraySerializer());
             return $manager;
         });
 
