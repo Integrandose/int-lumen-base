@@ -27,9 +27,7 @@ class DataArraySerializer extends Serializer {
             'per_page' => (int) $paginator->getPerPage(),
             'current_page' => $currentPage,
             'last_page' => $lastPage,
-            'total_pages' => $lastPage,
-            'to' => (int) $paginator->getTo(),
-            'from' => (int) $paginator->getFrom()
+            'total_pages' => $lastPage
         ];
 
         if ($currentPage > 1) {
