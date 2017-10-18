@@ -134,16 +134,16 @@ trait Filter
                 return $query->whereNotBetween($filter['attribute'], $this->filterValueToArray($filter['value']));
 
             case 'gte':
-                return $query->where($filter['attribute'], '>=', $filter['value']);
+                return $query->where($filter['attribute'], '>=', (float) $filter['value']);
 
             case 'gt':
-                return $query->where($filter['attribute'], '>', $filter['value']);
+                return $query->where($filter['attribute'], '>', (float) $filter['value']);
 
             case 'lt':
-                return $query->where($filter['attribute'], '<', $filter['value']);
+                return $query->where($filter['attribute'], '<', (float) $filter['value']);
 
             case 'lte':
-                return $query->where($filter['attribute'], '<=', $filter['value']);
+                return $query->where($filter['attribute'], '<=', (float) $filter['value']);
 
             case 'like':
                 return $query->where($filter['attribute'], 'like', $filter['value']);
