@@ -120,8 +120,8 @@ trait Filter
         }
 
 
-        if( !is_null($this->language) && $this->language!= 'all' && in_array($filter['attribute'], $this->translationAttributes)) {
-            $filter['attribute'] .= '.'.$this->language;
+        if (!is_null($this->language) && $this->language != 'all' && in_array($filter['attribute'], $this->translationAttributes)) {
+            $filter['attribute'] .= '.' . $this->language;
         }
 
 
@@ -134,22 +134,26 @@ trait Filter
                 return $query->whereNotBetween($filter['attribute'], $this->filterValueToArray($filter['value']));
 
             case 'gte':
-                return $query->where($filter['attribute'], '>=',(is_numeric($filter['value']))? (float) $filter['value'] : $filter['value']);
+                return $query->where($filter['attribute'], '>=', (is_numeric($filter['value'])) ? (float)$filter['value'] : $filter['value']);
 
             case 'gt':
-                return $query->where($filter['attribute'], '>', (is_numeric($filter['value']))? (float) $filter['value'] : $filter['value']);
+                return $query->where($filter['attribute'], '>', (is_numeric($filter['value'])) ? (float)$filter['value'] : $filter['value']);
 
             case 'lt':
-                return $query->where($filter['attribute'], '<', (is_numeric($filter['value']))? (float) $filter['value'] : $filter['value']);
+                return $query->where($filter['attribute'], '<', (is_numeric($filter['value'])) ? (float)$filter['value'] : $filter['value']);
 
             case 'lte':
-                return $query->where($filter['attribute'], '<=', (is_numeric($filter['value']))? (float) $filter['value'] : $filter['value']);
+                return $query->where($filter['attribute'], '<=', (is_numeric($filter['value'])) ? (float)$filter['value'] : $filter['value']);
 
             case 'like':
                 return $query->where($filter['attribute'], 'like', $filter['value']);
 
             case 'in':
-                return $query->whereIn($filter['attribute'], array_filter(explode(',', $filter['value'])));
+
+                $values = explode(',', $filter['value']);
+                $valuesJson = json_encode($values);
+                return ($this->isJsonColumn($filter['attribute']))
+                    ? $query->whereRaw("JSON_CONTAINS({$filter['attribute']}, '{$valuesJson}')"): $query->whereIn($filter['attribute'], array_filter(explode(',', $filter['value'])));
 
             case 'notin':
                 return $query->whereNotIn($filter['attribute'], array_filter(explode(',', $filter['value'])));
@@ -176,6 +180,11 @@ trait Filter
         $values = array_filter(explode(',', $value));
 
         return array_map([$this, 'filterValueCast'], $values);
+    }
+
+    private function isJsonColumn($column)
+    {
+        return $this->hasCast($column, 'json');
     }
 
     /**
