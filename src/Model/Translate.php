@@ -68,39 +68,58 @@ trait Translate
                 $this->attributes[$attribute] = $this->translations[$attribute];
                 continue;
             }
-
+            
             // $this->attributes[$attribute] =
             //     isset($this->translations[$attribute][$this->getLanguage()])
             //     && $this->translations[$attribute][$this->getLanguage()] != ''
             //         ? $this->translations[$attribute][$this->getLanguage()]
             //         : current($this->translations[$attribute]);
 
+
             $this->attributes[$attribute] = $this->getTranslate($attribute);
 
         }
+
     }
 
 
     private function getTranslate($attribute)
     {
-        if (isset($this->translations[$attribute][$this->getLanguage()])
-            && $this->translations[$attribute][$this->getLanguage()] != '') {
-            return $this->translations[$attribute][$this->getLanguage()];
-        }
 
-        foreach ($this->translations[$attribute] as $lang => $translate) {
-            if (is_string($translate) && $translate !== '' ) {
-                $this->translationInfo[$attribute] = $lang;
-                return $translate;
+        if (!is_array($this->translations[$attribute][$this->getLanguage()])) {
+            if (isset($this->translations[$attribute][$this->getLanguage()])
+                && $this->translations[$attribute][$this->getLanguage()] != '') {
+                return $this->translations[$attribute][$this->getLanguage()];
             }
 
-            if (is_array($translate) && $translate ) {
-                $this->translationInfo[$attribute] = $lang;
-                return $translate;
+            foreach ($this->translations[$attribute] as $lang => $translate) {
+                if (is_string($translate) && $translate !== '') {
+                    $this->translationInfo[$attribute] = $lang;
+                    return $translate;
+                }
             }
+
+            return '';
         }
 
-        return '';
+        if (is_array($this->translations[$attribute][$this->getLanguage()])) {
+
+            if (isset($this->translations[$attribute][$this->getLanguage()])
+                && !empty($this->translations[$attribute][$this->getLanguage()])) {
+                return $this->translations[$attribute][$this->getLanguage()];
+            }
+
+            foreach ($this->translations[$attribute] as $lang => $translate) {
+
+                if (is_array($translate) && $translate) {
+                    $this->translationInfo[$attribute] = $lang;
+                    return $translate;
+                }
+            }
+
+            return '';
+        }
+
     }
 
 
