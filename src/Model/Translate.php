@@ -95,7 +95,6 @@ trait Translate
             }
         }
 
-        $this->translationInfo[$attribute] = '';
         return '';
     }
 
