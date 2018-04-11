@@ -89,7 +89,12 @@ trait Translate
         }
 
         foreach ($this->translations[$attribute] as $lang => $translate) {
-            if ($translate !== '') {
+            if (is_string($translate) && $translate !== '' ) {
+                $this->translationInfo[$attribute] = $lang;
+                return $translate;
+            }
+
+            if (is_array($translate) && $translate ) {
                 $this->translationInfo[$attribute] = $lang;
                 return $translate;
             }
