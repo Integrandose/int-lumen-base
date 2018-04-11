@@ -15,6 +15,8 @@ trait Translate
 
     protected $translations = [];
 
+    public $translationInfo = [];
+
 
     /**
      * Set language
@@ -54,11 +56,11 @@ trait Translate
         }
 
         foreach ($this->translationAttributes as $attribute) {
-            if(!isset($this->attributes[$attribute])) {
+            if (!isset($this->attributes[$attribute])) {
                 continue;
             }
 
-            if(!isset($this->attributes[$attribute])) {
+            if (!isset($this->attributes[$attribute])) {
                 continue;
             }
 
@@ -67,13 +69,34 @@ trait Translate
                 continue;
             }
 
-            $this->attributes[$attribute] =
-                isset($this->translations[$attribute][$this->getLanguage()])
-                && $this->translations[$attribute][$this->getLanguage()] != ''
-                    ? $this->translations[$attribute][$this->getLanguage()]
-                    : current($this->translations[$attribute]);
+            // $this->attributes[$attribute] =
+            //     isset($this->translations[$attribute][$this->getLanguage()])
+            //     && $this->translations[$attribute][$this->getLanguage()] != ''
+            //         ? $this->translations[$attribute][$this->getLanguage()]
+            //         : current($this->translations[$attribute]);
+
+            $this->attributes[$attribute] = $this->getTranslate($attribute);
 
         }
+    }
+
+
+    private function getTranslate($attribute)
+    {
+        if (isset($this->translations[$attribute][$this->getLanguage()])
+            && $this->translations[$attribute][$this->getLanguage()] != '') {
+            return $this->translations[$attribute][$this->getLanguage()];
+        }
+
+        foreach ($this->translations[$attribute] as $lang => $translate) {
+            if ($translate !== '') {
+                $this->translationInfo[$attribute] = $lang;
+                return $translate;
+            }
+        }
+
+        $this->translationInfo[$attribute] = '';
+        return '';
     }
 
 
@@ -83,7 +106,7 @@ trait Translate
     private function fillTranslations()
     {
         foreach ($this->translationAttributes as $attribute) {
-            if(!isset($this->attributes[$attribute])) {
+            if (!isset($this->attributes[$attribute])) {
                 continue;
             }
 
