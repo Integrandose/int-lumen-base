@@ -80,45 +80,41 @@ trait Translate
 
         }
 
+
     }
 
-
+    /**
+     * @todo refactoring thism altera a verificação se o campo é um array pelo atribute de cast
+     *
+     */
     private function getTranslate($attribute)
     {
 
-        if (!is_array($this->translations[$attribute][$this->getLanguage()])) {
-            if (isset($this->translations[$attribute][$this->getLanguage()])
-                && $this->translations[$attribute][$this->getLanguage()] != '') {
-                return $this->translations[$attribute][$this->getLanguage()];
-            }
+        $currentAttr = $this->translations[$attribute];
+   
+      
+       // if (!is_array($this->translations[$attribute][$this->getLanguage()])) {
+        if (isset($currentAttr[$this->getLanguage()])
+            && ((is_string($currentAttr[$this->getLanguage()]) && $currentAttr[$this->getLanguage()] != '')
+            || (is_array($currentAttr[$this->getLanguage()]) && count($currentAttr[$this->getLanguage()]) > 0))) {
 
-            foreach ($this->translations[$attribute] as $lang => $translate) {
-                if (is_string($translate) && $translate !== '') {
-                    $this->translationInfo[$attribute] = $lang;
-                    return $translate;
-                }
-            }
-
-            return '';
+            return $currentAttr[$this->getLanguage()];
         }
 
-        if (is_array($this->translations[$attribute][$this->getLanguage()])) {
-
-            if (isset($this->translations[$attribute][$this->getLanguage()])
-                && !empty($this->translations[$attribute][$this->getLanguage()])) {
-                return $this->translations[$attribute][$this->getLanguage()];
+        foreach ($currentAttr as $lang => $translate) {
+            if (is_string($translate) && $translate !== '') {
+                $this->translationInfo[$attribute] = $lang;
+                return $translate;
             }
 
-            foreach ($this->translations[$attribute] as $lang => $translate) {
-
-                if (is_array($translate) && $translate) {
-                    $this->translationInfo[$attribute] = $lang;
-                    return $translate;
-                }
+            if (is_array($translate) && $translate) {
+                $this->translationInfo[$attribute] = $lang;
+                return $translate;
             }
-
-            return '';
         }
+
+        return '';
+
 
     }
 
