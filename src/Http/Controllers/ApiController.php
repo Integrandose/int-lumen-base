@@ -2,7 +2,7 @@
 
 namespace Int\Lumen\Core\Http\Controllers;
 
-
+use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
@@ -73,7 +73,7 @@ class ApiController extends BaseController
     public function transformData($data, TransformerAbstract $transform)
     {
 
-        if ($data instanceof LengthAwarePaginator || $data instanceof Collection) return $this->transformCollection($data, $transform);
+        if ($data instanceof LengthAwarePaginator || $data instanceof Collection || $data instanceof BaseCollection) return $this->transformCollection($data, $transform);
         return $this->transformItem($data, $transform);
     }
 
@@ -96,7 +96,7 @@ class ApiController extends BaseController
     private function transformCollection($data, TransformerAbstract $transform)
     {
 
-        if ($data instanceof Collection) {
+        if ($data instanceof BaseCollection) {
             $resource = new CollectionFractal($data, $transform);
         }
 
