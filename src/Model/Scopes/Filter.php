@@ -134,16 +134,16 @@ trait Filter
                 return $query->whereNotBetween($filter['attribute'], $this->filterValueToArray($filter['value']));
 
             case 'gte':
-                return $query->where($filter['attribute'], '>=', (is_numeric($filter['value'])) ? (float)$filter['value'] : $filter['value']);
+                return $query->where($filter['attribute'], '>=', $this->filterValueCast($filter['value']));
 
             case 'gt':
-                return $query->where($filter['attribute'], '>', (is_numeric($filter['value'])) ? (float)$filter['value'] : $filter['value']);
+                return $query->where($filter['attribute'], '>', $this->filterValueCast($filter['value']));
 
             case 'lt':
-                return $query->where($filter['attribute'], '<', (is_numeric($filter['value'])) ? (float)$filter['value'] : $filter['value']);
+                return $query->where($filter['attribute'], '<', $this->filterValueCast($filter['value']));
 
             case 'lte':
-                return $query->where($filter['attribute'], '<=', (is_numeric($filter['value'])) ? (float)$filter['value'] : $filter['value']);
+                return $query->where($filter['attribute'], '<=', $this->filterValueCast($filter['value']));
 
             case 'like':
                 return $query->where($filter['attribute'], 'like', $filter['value']);
@@ -172,7 +172,19 @@ trait Filter
 
     private function filterValueCast($value)
     {
-        return is_numeric($value) ? (float)$value : (string)$value;
+        switch ($value) {
+            case is_numeric($value):
+                return (float) $value;
+                break;
+
+            case is_array($value):
+                return (isset($value['date']) && isset($value['timezone_type']) && isset($value['timezone'])) ? new \DateTime($value['date']) : null;
+                break;
+
+            default:
+                return (string) $value;
+                break;
+        }
     }
 
     private function filterValueToArray($value)
