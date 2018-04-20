@@ -47,6 +47,8 @@ trait Translate
     private function translate()
     {
 
+        $this->translationInfo['full_translation'] = true;
+
         if (empty($this->translationAttributes)) {
             return;
         }
@@ -91,6 +93,7 @@ trait Translate
     {
 
         $currentAttr = $this->translations[$attribute];
+
    
       
        // if (!is_array($this->translations[$attribute][$this->getLanguage()])) {
@@ -104,11 +107,13 @@ trait Translate
         foreach ($currentAttr as $lang => $translate) {
             if (is_string($translate) && $translate !== '') {
                 $this->translationInfo[$attribute] = $lang;
+                $this->translationInfo['full_translation'] = false;
                 return $translate;
             }
 
             if (is_array($translate) && $translate) {
                 $this->translationInfo[$attribute] = $lang;
+                $this->translationInfo['full_translation'] = false;
                 return $translate;
             }
         }
